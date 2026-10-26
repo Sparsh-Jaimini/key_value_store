@@ -48,14 +48,26 @@ impl KeyValueStore{
 
 fn main() {
     
-    let mut foo = KeyValueStore::new();
-    let _presence_of_key=foo.insert("Sparsh", "Kota");
+    // let mut foo = KeyValueStore::new();
+    // let _presence_of_key=foo.insert("Sparsh", "Kota");
 
-    foo.insert("Sparsh","Jaipur");
+    // foo.insert("Sparsh","Jaipur");
     
-    match foo.get("Sparsh"){
-        Some(x)=>println!("The value is {x}"),
-        None=>println!("No value found")
+    // match foo.get("Sparsh"){
+    //     Some(x)=>println!("The value is {x}"),
+    //     None=>println!("No value found")
+    // }
+
+    let mut p = Primary { pkvstore: KeyValueStore::new()};
+    let mut s= Secondary {skvstore: KeyValueStore::new()};
+
+    p.insert("Sparsh","Kota");
+    p.insert("Sparsh","Jaipur");
+
+    Primary::replicate(&mut s,"Sparsh","Jaipur");
+
+    if let Some(x) = s.skvstore.get("Sparsh") {
+        println!("The value is {x}");
     }
     
 }
